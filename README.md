@@ -14,7 +14,7 @@ _This project is very much a work in progress. Contributions are welcomed!_
 
 ## Inspiration
 
-The TypeScript Playground V2 comes packed with all sorts of nice features, including the ability to create Plugins. Per the TypeScript docs:
+The TypeScript Playground V2 comes packed with all sorts of nice features, including the ability to create plugins. Per the TypeScript docs:
 
 > The new TypeScript Playground allows people to hook into the Playground and extend it in ways in which the TypeScript team don't expect.
 >
@@ -22,23 +22,23 @@ The TypeScript Playground V2 comes packed with all sorts of nice features, inclu
 >
 > Playground plugins have no fancy frameworks, you're free to inject them at runtime and use them if you need to - but the current plugins are built with the DOM APIs and TypeScript.
 
-Since Svelte can be compiled down to dependency-free JavaScript classes, it makes as a great fit as an alternative to the DOM APIs. This project allows you to use Svelte in addition to the DOM APIs to create an interactive UI for your plugin.
+Since Svelte can be compiled down to dependency-free JavaScript classes, it makes as a great fit as an alternative to the DOM APIs. This project allows you to use Svelte in addition to the DOM APIs to create a rich, interactive UI for your plugin.
 
 ## How To Use This Starter
 
 ### Step 1. Clone this repo and navigate to the directory
 
 ```sh
-git clone github.com/whateves
+git clone git@github.com:gojutin/typescript-playground-plugin-svelte.git
 ```
 
 ```sh
-cd ts-playground-plugin-svelte
+cd typescript-playground-plugin-svelte
 ```
 
 ### Step 2. Download dependencies
 
-```shell
+```sh
 npm install
 ```
 
@@ -62,13 +62,13 @@ A new tab with your plugin name should appear.
 
 <img src="./screenshot.png" style="max-width: 100%;"/>
 
-**Note: The browser will need to be reloaded in order to see any changes that you make to your plugin.**
+**_Note: The browser will need to be reloaded in order to see any changes that you make to your plugin._**
 
 ## Props
 
 The TypeScript Playground Plugin API provides lifecycle methods that are used to interact with the playground. This library uses writable Svelte store objects to provide the values provided by these lifecycle methods to the Svelte app via props. The following props are provided to your Svelte app and are named based on the lifecycle method that they are generated from:
 
-`didMount`, `modelChanged`, and `modelChangedDebounce`
+`didMount`, `modelChanged`, `modelChangedDebounce`, `willUnmount`, and `didUnmount`
 
 You can access them in `App.svelte` like so:
 
