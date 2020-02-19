@@ -14,7 +14,7 @@ _This project is very much a work in progress. Contributions are welcomed!_
 
 ## Inspiration
 
-The TypeScript Playground V2 comes packed with all sorts of nice features, including the ability to create plugins. Per the TypeScript docs:
+The TypeScript Playground V2 comes packed with lots of nice features, including the ability to create plugins. Per the TypeScript docs:
 
 > The new TypeScript Playground allows people to hook into the Playground and extend it in ways in which the TypeScript team don't expect.
 >
@@ -107,7 +107,7 @@ Runs on model change, Returns `{sandbox, model}`
 
 Runs with delay on model change, Returns `{sandbox, model}`
 
-The `modelChanged` and `modelChangedDebounce` lifecycle methods provide the updated state of the playground as it changes. The return values of both methods are passed into the Svelte app as props via a writable store instance. You can easily auto-subscribe to these values to be notified when any changes occur.
+The `modelChanged` and `modelChangedDebounce` methods provide the current state of the editor as the code changes. The return values of both methods are passed into the Svelte app as props via a writable store instance. You can easily auto-subscribe to these values to be notified when any changes occur.
 
 App.svelte
 
@@ -135,4 +135,6 @@ Style you Svelte components as normal. All styles defined in your Svelte compone
 
 ## More about TypeScript Playground Plugins
 
-This repo also contains the `CONTRIBUTING.md` guide provided by the TypeScript team. It includes more information about how to interact with the playground.
+The `src/vendor` directory contains all of the TypeScript type definitions for the TypeScript Playground Plugin API. This is the best place to find the various config options, properties, and methods that are available.
+
+This repo also contains the `CONTRIBUTING.md` guide provided by the TypeScript team. It includes more information about how to work with plugins.
