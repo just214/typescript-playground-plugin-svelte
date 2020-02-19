@@ -52,17 +52,19 @@ This will start a development server with live reloading of your plugin.
 
 ### Step 4. Configure and use your plugin
 
-You can further customize your plugin by modifying the object in `src/index.ts`. Change the `displayName` property to change the label of the tab for your plugin.
+You can further customize your plugin by modifying the `customPlugin` object in `src/index.ts`. For instance, change the `displayName` property to change the label of the tab for your plugin.
 
 Visit [https://www.typescriptlang.org/v2/en/play](https://www.typescriptlang.org/v2/en/play).
 
 Select the **Options** tab and tick the box for **Connect to localhost:5000/index.js**.
 
-A new tab with your plugin name should appear.
+<img src="./screenshots/screenshot1.png" style="max-width: 80%;"/>
 
-<img src="./screenshot.png" style="max-width: 100%;"/>
+Now, **refresh the browser**. When the playground loads, a new tab with your plugin name should appear.
 
-**_Note: The browser will need to be reloaded in order to see any changes that you make to your plugin._**
+<img src="./screenshots/screenshot2.png" style="max-width: 80%;"/>
+
+**_Note: In order to see your changes, the browser will need to be reloaded each time you make changes to the plugin._**
 
 ## Props
 
@@ -79,16 +81,19 @@ You can access them in `App.svelte` like so:
   export let modelChangedDebounce;
   export let willUnmount;
   export let didUnmount;
+
+  // auto-subscribe
+  const { sandbox } = $modelChanged;
 </script>
 ```
 
 ### `didMount`, `willUnmount`, and `didUnmount`
 
-Provides the **container** element and **sandbox** object provided by the respectivelifecycle method. (Runs only once)
+Runs once, Returns `{container, sandbox}`
 
 - `container`
 
-  This is the root container element that your Svelte app is mounted to. You can use it to apply styles.
+  This is the root container element that your Svelte app is mounted to.
 
 - `sandbox`
 
@@ -96,11 +101,11 @@ Provides the **container** element and **sandbox** object provided by the respec
 
 ### `modelChanged`
 
-Provides the **sandbox** and **model** objects provided by the **modelChanged** lifecycle method. (Runs on model change)
+Runs on model change, Returns `{sandbox, model}`
 
 ### `modelChangedDebounce`
 
-Provides the **sandbox** and **model** objects provided by the **modelChangedDebounce** lifecycle method. (Runs with delay on model change)
+Runs with delay on model change, Returns `{sandbox, model}`
 
 The `modelChanged` and `modelChangedDebounce` lifecycle methods provide the updated state of the playground as it changes. The return values of both methods are passed into the Svelte app as props via a writable store instance. You can easily auto-subscribe to these values to be notified when any changes occur.
 

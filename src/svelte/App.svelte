@@ -3,9 +3,7 @@
   export let didMount;
   export let modelChanged;
   export let modelChangedDebounce;
-  let defaultCode = `const greeting = "Hello World!"`
-  let userInput = $didMount.sandbox.getText() || defaultCode ;
-
+  let userInput = `const greet = () => "Hello World!"`;
 
   $: {
     const {sandbox, container} = $didMount;
@@ -45,9 +43,9 @@
 
 <main>
   <Welcome />
-  <input bind:value="{userInput}" autofocus />
+  <input bind:value="{userInput}" />
   <br />
-  <button on:click={handleClear}>Clear</button>
+  <button on:click={handleClear}>clear</button>
 </main>
 
 <style>
@@ -57,6 +55,10 @@
     background: rgb(24, 24, 24);
     min-height: 100vh;
     padding: 20px;
+  }
+
+  h3 {
+    color: white;
   }
 
   input {
@@ -82,10 +84,10 @@
     color: dodgerblue;
     cursor: pointer;
     font-size: 1rem;
-    padding: 5px;
+    padding: 3px 5px;
     margin: 5px;
     outline: none;
-    border-radius: .4rem;
+    border-radius: .3rem;
     transition: background-color .5s;
   }
 
