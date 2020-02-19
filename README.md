@@ -2,7 +2,7 @@
 
 Easily create TypeScript [Playground Plugins](https://www.typescriptlang.org/v2/dev/playground-plugins/) with [Svelte](https://svelte.dev/).
 
-> 🚧 This project is very much a work in progress. Contributions are welcomed!
+> 🚧 This project is a work in progress. Contributions are welcomed!
 
 ## Table Of Contents
 
@@ -26,7 +26,7 @@ Since Svelte can be compiled down to dependency-free JavaScript classes, it offe
 
 ## How To Use This Starter
 
-### Step 1. Clone this repo and navigate to the directory
+#### Step 1. Clone this repo and navigate to the directory
 
 ```sh
 git clone git@github.com:gojutin/typescript-playground-plugin-svelte.git
@@ -36,13 +36,13 @@ git clone git@github.com:gojutin/typescript-playground-plugin-svelte.git
 cd typescript-playground-plugin-svelte
 ```
 
-### Step 2. Download dependencies
+#### Step 2. Download dependencies
 
 ```sh
 npm install
 ```
 
-### Step 3. Start the development server
+#### Step 3. Start the development server
 
 ```sh
 npm start
@@ -50,9 +50,9 @@ npm start
 
 This will start a development server with live reloading of your plugin. As you edit any files in the `src` directory, the app will recompile and update `dist/index.js`, which is the file that is served to the TypeScript Playground.
 
-**_Note: This does not reload the browser when your files change. In order to see your changes, the browser will need to be manually reloaded each time you make changes to the plugin._**
+> _Note: This does not reload the browser when your files change. In order to see your changes, the browser will need to be manually reloaded each time you make changes to the plugin._
 
-### Step 4. Configure and use your plugin
+#### Step 4. Configure and use your plugin
 
 You can further customize your plugin by modifying the `customPlugin` object in `src/index.ts`. For instance, you can change the `displayName` property to change the label of the tab for your plugin. See the `PlaygroundPlugin` interface in `vendor/playground.d.ts` for all of the available options.
 
