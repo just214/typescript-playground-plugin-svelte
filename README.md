@@ -91,9 +91,9 @@ You can access them in `App.svelte` like so:
 </script>
 ```
 
-### `didMount`, `willUnmount`, and `didUnmount`
+#### `didMount`, `willUnmount`, and `didUnmount`
 
-Runs once, Returns `{container, sandbox}`
+Runs once. Returns `{container, sandbox}`
 
 - `container`
 
@@ -103,13 +103,13 @@ Runs once, Returns `{container, sandbox}`
 
   This object provides several properties and methods to interact with the playground. See all of the available types in `src/vendor/sandbox.d.ts`.
 
-### `modelChanged`
+#### `modelChanged`
 
-Runs on model change, Returns `{sandbox, model}`
+Runs on model change. Returns `{sandbox, model}`
 
-### `modelChangedDebounce`
+#### `modelChangedDebounce`
 
-Runs with delay on model change, Returns `{sandbox, model}`
+Runs with delay on model change. Returns `{sandbox, model}`
 
 The `modelChanged` and `modelChangedDebounce` methods provide the current state of the editor as the code changes. The return values of both methods are passed into the Svelte app as props via a writable store instance. You can easily auto-subscribe to these values to be notified when any changes occur.
 
