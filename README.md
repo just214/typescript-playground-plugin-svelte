@@ -2,7 +2,7 @@
 
 Easily create TypeScript [Playground Plugins](https://www.typescriptlang.org/v2/dev/playground-plugins/) with [Svelte](https://svelte.dev/).
 
-_This project is very much a work in progress. Contributions are welcomed!_
+> 🚧 This project is very much a work in progress. Contributions are welcomed!
 
 ## Table Of Contents
 
@@ -62,7 +62,7 @@ Select the **Options** tab and tick the box for **Connect to localhost:5000/inde
 
 <img src="./screenshots/screenshot1.png" style="max-width: 80%;"/>
 
-Now, **refresh the browser**. When the playground loads, a new tab with your plugin name should appear.
+Now, **refresh the browser**. When the playground reeoads, a new tab with your plugin should appear! 🎉
 
 <img src="./screenshots/screenshot2.png" style="max-width: 80%;"/>
 
