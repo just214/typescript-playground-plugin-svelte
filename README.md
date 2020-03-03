@@ -4,15 +4,19 @@ Easily create TypeScript [Playground Plugins](https://www.typescriptlang.org/v2/
 
 > 🚧 This project is a work in progress. Contributions are welcomed!
 
+Prefer React? Check out [https://github.com/gojutin/typescript-playground-plugin-react](https://github.com/gojutin/typescript-playground-plugin-react).
+
+> Note: Due to time constraints, this template does not maintain feature parity with the React template. Hopefully this will change in the future, but for now, any contributions are welcomed. If you want the latest and greatest, please use the official plugin template or React template.
+
 ## Table Of Contents
 
-1. [Inspiration](#inspiration)
-2. [How To Use This Starter](#how-to-use-this-starter)
+1. [About](#about)
+2. [Getting Started](#getting-started)
 3. [Props](#props)
 4. [Styling Your Plugin](#styling-your-plugin)
 5. [More about TypeScript Playground Plugins](#more-about-typescript-playground-plugins)
 
-## Inspiration
+## About
 
 The TypeScript Playground V2 comes packed with lots of new features, including the ability to create plugins. Per the TypeScript docs:
 
@@ -24,7 +28,7 @@ The TypeScript Playground V2 comes packed with lots of new features, including t
 
 Since Svelte can be compiled down to dependency-free JavaScript classes, it offers a great, declarative alternative to writing imperative markup with the DOM APIs. This library allows you to use Svelte as a replacement or addition to the DOM APIs to create a rich, interactive UI for your plugin.
 
-## How To Use This Starter
+## Getting Started
 
 #### Step 1. Clone this repo and navigate to the directory
 
@@ -141,6 +145,32 @@ The `didMount` prop also provides the container element, which you can apply sty
 
 ## More about TypeScript Playground Plugins
 
-The `src/vendor` directory contains all of the TypeScript type definitions for the TypeScript Playground Plugin API. This is the best place to find the various config options, properties, and methods that are available.
+[Official Playground Plugin Documentation](https://www.typescriptlang.org/v2/dev/playground-plugins/)
 
-This repo also contains the `CONTRIBUTING.md` guide provided by the TypeScript team. It includes more information about how to work with plugins.
+You can create a plugin (without React) from the official plugin template:
+
+```sh
+npm init typescript-playground-plugin playground-my-plugin
+```
+
+For convenience, this repo contains the `CONTRIBUTING.md` file included in the official plugin template. This document contains useful information about how to work with the plugins.
+
+The `src/plugin/vendor` directory contains all of the TypeScript type definitions for the TypeScript Playground Plugin API. This is the best place to find the various config options, properties, and methods that are available.
+
+### Need inspiration?
+
+[Orta](https://github.com/orta) created a really cool plugin that lets you create presentations in the TypeScript playground using Reveal.js. You can check it out here:
+
+[https://github.com/orta/playground-slides](https://github.com/orta/playground-slides)
+
+He also offered these plugin ideas in [this](https://www.reddit.com/r/typescript/comments/eywcn8/learn_how_to_make_a_typescript_playground_plugin/fglyuon/) reddit thread.
+
+- Explain the parts of a complex TS type
+- Show TS -> Flow interfaces
+- Run tutorials in the playground against live code
+- AST Viewer
+- ts-query runner
+- codemod runner
+- Highlight TS vs JS code
+- Show all used types
+- Show dts files
