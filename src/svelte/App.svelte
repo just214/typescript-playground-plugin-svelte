@@ -1,43 +1,53 @@
 <script>
   import Welcome from "./Welcome.svelte";
-  export let didMount;
-  export let modelChanged;
-  export let modelChangedDebounce;
-  let userInput = `const greet = () => "Hello World!"`;
+  // export let sandbox;
+  // export let container;
+  export let useDebounce;
+  export let code;
+  export let setCode;
+  export let model;
+  export let markers;
+  export let showModal;
+  export let flashInfo;
+
+  let userInput = `function echo(arg){return arg};`;
+
+  useDebounce(true); // Default is true
 
   $: {
-    const {sandbox, container} = $didMount;
-    console.groupCollapsed("didMount");
-    console.info("sandbox", sandbox);
-    console.info("container", container);
-    console.groupEnd();
+    // update the editor code on userInput change.
+    setCode(userInput, {format: true});
   }
 
   $: {
-    const {sandbox} = $didMount;
-    sandbox.setText(userInput);
+    // The code changes as you update userInput
+    console.info("code", $code);
   }
 
 
   $: {
-    const { sandbox, model } = $modelChanged;
     console.groupCollapsed("modelChanged");
-    console.info("sandbox", sandbox);
-    console.info("model", model);
+    // Will be debounced by default. set useDebounce(false) to disable.
+    console.info("code", $code);
+    console.info("model", $model);
     console.groupEnd();
   }
 
-  $: {
-    const { sandbox, model } = $modelChangedDebounce;
-    console.groupCollapsed("modelChangedDebounce");
-    console.info("sandbox", sandbox);
-    console.info("model", model);
-    console.groupEnd();
+  function handleFixCode() {
+    setCode(`function echo<T>(arg: T):T {return arg;};`, {format: true})
   }
 
   function handleClear() {
-    $didMount.sandbox.setText("")
+    setCode("")
     userInput = ""
+  }
+
+  function handleShowModal() {
+    showModal($code, "Here is your code!")
+  }
+
+  function handleFlashInfo() {
+    flashInfo("Info!")
   }
 </script>
 
@@ -45,7 +55,14 @@
   <Welcome />
   <input bind:value="{userInput}" />
   <br />
-  <button on:click={handleClear}>clear</button>
+  <button on:click={handleFixCode}>Fix Code</button>
+  <button on:click={handleClear}>Clear Editor</button>
+  <button on:click={handleShowModal}>Show Modal</button>
+  <button on:click={handleFlashInfo}>Flash Info</button>
+	{#each $markers as marker}
+		<p class="marker">  Line {marker.startLineNumber}:&nbsp;
+      {marker.message}</p>
+	{/each}
 </main>
 
 <style>
@@ -85,6 +102,7 @@
     cursor: pointer;
     font-size: 1rem;
     padding: 3px 5px;
+    min-width: 120px;
     margin: 5px;
     outline: none;
     border-radius: .3rem;
@@ -93,5 +111,10 @@
 
   button:hover {
     background: rgb(61, 61, 61);
+  }
+
+  p.marker {
+    color: orange;
+    margin: 5px;
   }
 </style>

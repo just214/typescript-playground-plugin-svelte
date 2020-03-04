@@ -1,4 +1,5 @@
-declare type Sandbox = ReturnType<typeof import('./sandbox').createTypeScriptSandbox>;
+// declare type Sandbox = import('./sandbox').Sandbox;
+export { PluginUtils } from './pluginUtils';
 export declare type PluginFactory = {
     (i: (key: string, components?: any) => string): PlaygroundPlugin;
 };
@@ -22,12 +23,15 @@ export interface PlaygroundPlugin {
     willUnmount?: (sandbox: Sandbox, container: HTMLDivElement) => void;
     /** After we remove the tab */
     didUnmount?: (sandbox: Sandbox, container: HTMLDivElement) => void;
+    /** An object you can use to keep data around in the scope of your plugin object */
+    data?: any;
 }
 interface PlaygroundConfig {
     lang: string;
     prefix: string;
 }
-export declare const setupPlayground: (sandbox: {
+
+export type Sandbox = {
     config: {
         text: string;
         useJavaScript: boolean;
@@ -43,8 +47,12 @@ export declare const setupPlayground: (sandbox: {
         };
         domID: string;
     };
+    supportedVersions: readonly ["2.4.1", "2.7.2", "2.8.1", "3.0.1", "3.1.6", "3.3.3", "3.5.1", "3.6.3", "3.7.5", "3.8.2"];
     editor: import("monaco-editor").editor.IStandaloneCodeEditor;
+    language: string;
+    monaco: typeof import("monaco-editor");
     // getWorkerProcess: () => Promise<import("typescriptlang-org/static/js/sandbox/tsWorker").TypeScriptWorker>;
+    tsvfs: typeof import("./typescript-vfs");
     getEmitResult: () => Promise<import("typescript").EmitOutput>;
     getRunnableJS: () => Promise<string>;
     getDTSForCode: () => Promise<string>;
@@ -52,22 +60,22 @@ export declare const setupPlayground: (sandbox: {
     getModel: () => import("monaco-editor").editor.ITextModel;
     getText: () => string;
     setText: (text: string) => void;
-    getAST: () => import("typescript").SourceFile;
+    getAST: () => Promise<import("typescript").SourceFile>;
     ts: typeof import("typescript");
-    createTSProgram: () => import("typescript").Program;
+    createTSProgram: () => Promise<import("typescript").Program>;
     compilerDefaults: import("monaco-editor").languages.typescript.CompilerOptions;
     getCompilerOptions: () => import("monaco-editor").languages.typescript.CompilerOptions;
     setCompilerSettings: (opts: import("monaco-editor").languages.typescript.CompilerOptions) => void;
     updateCompilerSetting: (key: string | number, value: any) => void;
     updateCompilerSettings: (opts: import("monaco-editor").languages.typescript.CompilerOptions) => void;
-    getTwoSlashComplierOptions: (code: string) => any;
     setDidUpdateCompilerSettings: (func: (opts: import("monaco-editor").languages.typescript.CompilerOptions) => void) => void;
-    supportedVersions: readonly ["3.7.5", "3.6.3", "3.5.1", "3.3.3", "3.1.6", "3.0.1", "2.8.1", "2.7.2", "2.4.1"];
     // lzstring: typeof import("typescriptlang-org/static/js/sandbox/vendor/lzstring.min");
     getURLQueryWithCompilerOptions: (sandbox: any, paramOverrides?: any) => string;
-    language: string;
-    monaco: typeof import("monaco-editor");
-}, monaco: typeof import("monaco-editor"), config: PlaygroundConfig, i: (key: string) => string) => {
+    getTwoSlashComplierOptions: (code: string) => any;
+    languageServiceDefaults: import("monaco-editor").languages.typescript.LanguageServiceDefaults;
+}
+
+export declare const setupPlayground: (sandbox: Sandbox, monaco: typeof import("monaco-editor"), config: PlaygroundConfig, i: (key: string) => string) => {
     exporter: {
         openProjectInStackBlitz: () => void;
         openProjectInCodeSandbox: () => void;
@@ -81,4 +89,3 @@ export declare const setupPlayground: (sandbox: {
     registerPlugin: (plugin: PlaygroundPlugin) => void;
 };
 export declare type Playground = ReturnType<typeof setupPlayground>;
-export {};

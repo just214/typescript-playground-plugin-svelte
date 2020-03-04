@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
+    "target": "ESNext",
     "esModuleInterop": true,
-    "noEmit": true
+    "noEmit": true,
+    "typeRoots": ["src/types", "src/vendor"]
   }
 }

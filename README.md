@@ -2,11 +2,9 @@
 
 Easily create TypeScript [Playground Plugins](https://www.typescriptlang.org/v2/dev/playground-plugins/) with [Svelte](https://svelte.dev/).
 
-> 🚧 This project is a work in progress. Contributions are welcomed!
+> 🚧 This project is experimental. If you have any ideas on how to improve this library, any contributions are welcomed. Also, TypeScript Playground plugins currently only work in Chromium based browsers.
 
 Prefer React? Check out [https://github.com/gojutin/typescript-playground-plugin-react](https://github.com/gojutin/typescript-playground-plugin-react).
-
-> Note: Due to time constraints, this template does not maintain feature parity with the React template. Hopefully this will change in the future, but for now, any contributions are welcomed. If you want the latest and greatest, please use the official plugin template or React template.
 
 ## Table Of Contents
 
@@ -52,7 +50,7 @@ npm install
 npm start
 ```
 
-This will start a development server with live reloading of your plugin. As you edit any files in the `src` directory, the app will recompile and update `dist/index.js`, which is the file that is served to the TypeScript Playground.
+This will start a development server in watch mode. As you edit any files in the `src` directory, the app will recompile and update `dist/index.js`, which is the file that is served to the TypeScript Playground.
 
 > _Note: This does not reload the browser when your files change. In order to see your changes, the browser will need to be manually reloaded each time you make changes to the plugin._
 
@@ -72,82 +70,174 @@ Now, **refresh the browser**. When the playground reeoads, a new tab with your p
 
 ## Props
 
-The TypeScript Playground Plugin API provides lifecycle methods that are used to interact with the playground. This library uses [writable store objects](https://svelte.dev/tutorial/writable-stores) to provide the values provided by these lifecycle methods to the Svelte app via props. The following props are provided to your Svelte app and are named based on the lifecycle method that they are generated from:
+The TypeScript Playground Plugin API provides lifecycle methods that are used to interact with the playground. This library uses a combination of [writable store objects](https://svelte.dev/tutorial/writable-stores) and functions to provide the values and methods provided by these lifecycle methods to the Svelte app via props. The following props are provided to your Svelte app:
 
-- `didMount`
-- `modelChanged`
-- `modelChangedDebounce`
-- `willUnmount`
-- `didUnmount`
+### **code**
+
+*Writable store*
+
+```typescript
+string
+```
+
+> Although this is writable store value, you don't want to write to it. See `setCode` and `formatCode` below.
+
+The current code in the Monaco editor. This value updates on change to the Monaco editor with optional debouncing. Uses `sandbox.getText()`.
+
+### **setCode**
+
+*function*
+
+```typescript
+(code: string, options: {format: boolean}) => void
+```
+
+Set the code in the Monaco editor with optional formatting. Uses `sandbox.setText()`.
+
+### **formatCode**
+
+*function*
+
+```typescript
+() => void
+```
+
+Format the code in the Monaco editor. Alias for `sandbox.editor.getAction("editor.action.formatDocument").run()`.
+
+### **markers**
+
+*Readable store*
+
+```typescript
+IMarker[]
+```
+
+Alias for `sandbox.monaco.editor.getModelMarkers({})`. Kept in sync via `sandbox.editor.onDidChangeModelDecorations`.
+
+Here is the [type definition](https://github.com/Microsoft/monaco-editor/blob/master/monaco.d.ts#L875) for `IMarker`:
+
+```typescript
+interface IMarker {
+  owner: string;
+  resource: Uri;
+  severity: MarkerSeverity;
+  code?:
+    | string
+    | {
+        value: string;
+        link: Uri;
+      };
+  message: string;
+  source?: string;
+  startLineNumber: number;
+  startColumn: number;
+  endLineNumber: number;
+  endColumn: number;
+  relatedInformation?: IRelatedInformation[];
+  tags?: MarkerTag[];
+}
+```
+
+### **setDebounce**
+
+*function*
+
+```typescript
+(debounce: boolean) => void
+```
+Optionally debounce the `modelChange` event from the Plugin API. Per the Plugin docs, this is run on a delay and may not fire on every keystroke. The `code` prop will be updated accordingly. Default is `true`.
+
+### **sandbox**
+
+*object* 
+
+```typescript
+Sandbox
+```
+
+A DOM library for interacting with TypeScript and JavaScript code, which powers the heart of the TypeScript playground. This object provides several properties and methods to interact with the playground. See all of the available types in `src/plugin/vendor/sandbox.d.ts` and read more about the sandbox at [http://www.typescriptlang.org/v2/dev/sandbox/](http://www.typescriptlang.org/v2/dev/sandbox/).
+
+### **model**
+
+*Writable store*
+
+```typescript
+Model
+```
+
+The model is an object which Monaco uses to keep track of text in the editor. You can find the full type definition at `node_modules/monaco-editor/esm/vs/editor/editor.api.d.ts`. Although this is a writable store, you should not overwrite it.
+
+### **container**
+
+```typescript
+HTMLDivElement
+```
+
+The `div` element that wraps the entire sidebar.  The Svelte app is mounted to this element. Any style changes to this element will affect the entire sidebar.
+
+### **showModal**
+
+*function*
+
+```typescript
+(code: string, subtitle?: string, links?: string[]) => void
+```
+From `window.playground.ui` - This function accepts three arguments (code, subtitle, and links) and opens a model with the values you provide.
+
+### **flashInfo**
+
+*function*
+
+```typescript
+(message: string) => void
+```
+From `window.playground.ui` - This function accepts one argument (message) and and flashes a quick message in the center of the screen. 
+
+### **utils**
+
+*object*
+
+```typescript
+{
+  el: (str: string, el: string, container: Element) => void;, 
+  requireURL: (path: string) => string;, 
+  createASTTree: (node: Node) => HTMLDivElement;
+}
+```
+An object that contains three additional config options and functionality. `el`, `requireURL`, and `createASTTree`. See `src/plugin/vendor/pluginUtils.d.ts` for more information. 
+                                                                                                                           
+<hr />
 
 You can access them in `App.svelte` like so:
 
 ```html
 <script>
-  export let didMount;
-  export let modelChanged;
-  export let modelChangedDebounce;
-  export let willUnmount;
-  export let didUnmount;
-
-  // auto-subscribe
-  const { sandbox } = $modelChanged;
+  export let container;
+  export let sandbox;
+  export let model;
+  export let useDebounce;
+  export let code;
+  export let setCode;
+  export let formatCode;
+  export let markers;
+  export let showModal;
+  export let flashInfo;
+  export let utils;
 </script>
 ```
 
-#### `didMount`, `willUnmount`, and `didUnmount`
-
-Runs once. Returns `{container, sandbox}`
-
-- `container`
-
-  This is the root container element that your Svelte app is mounted to.
-
-- `sandbox`
-
-  This object provides several properties and methods to interact with the playground. See all of the available types in `src/vendor/sandbox.d.ts`.
-
-#### `modelChanged`
-
-Runs on model change. Returns `{sandbox, model}`
-
-#### `modelChangedDebounce`
-
-Runs with delay on model change. Returns `{sandbox, model}`
-
-The `modelChanged` and `modelChangedDebounce` methods provide the current state of the editor as the code changes. The return values of both methods are passed into the Svelte app as props via a writable store instance. You can easily auto-subscribe to these values to be notified when any changes occur.
-
-App.svelte
-
-```html
-<script>
-  export let modelChanged;
-  export let modelChangedDebounce;
-
-  // Auto-subscribe to any changes
-  $: {
-    const { sandbox, model } = $modelChanged;
-    console.log(sandbox.getText(), model);
-  }
-
-  $: {
-    const { sandbox, model } = $modelChangedDebounce;
-    console.log(sandbox.getText(), model);
-  }
-</script>
-```
 
 ## Styling your plugin
 
 Style you Svelte components as normal. All styles defined in your Svelte components are automatically injected into the page at render time. You can read more about styling Svelte components at [https://svelte.dev/docs#style](https://svelte.dev/docs#style).
 
-The `didMount` prop also provides the container element, which you can apply styles to. Be cautious as this will affect all tabs in the sidebar.
+You can also apply styles to the `container` element. Be cautious as this will affect all tabs in the sidebar.
 
 ## More about TypeScript Playground Plugins
 
 [Official Playground Plugin Documentation](https://www.typescriptlang.org/v2/dev/playground-plugins/)
 
-You can create a plugin (without React) from the official plugin template:
+You can create a plugin (without Svelte) from the official plugin template:
 
 ```sh
 npm init typescript-playground-plugin playground-my-plugin
@@ -155,7 +245,7 @@ npm init typescript-playground-plugin playground-my-plugin
 
 For convenience, this repo contains the `CONTRIBUTING.md` file included in the official plugin template. This document contains useful information about how to work with the plugins.
 
-The `src/plugin/vendor` directory contains all of the TypeScript type definitions for the TypeScript Playground Plugin API. This is the best place to find the various config options, properties, and methods that are available.
+The `src/vendor` directory contains all of the TypeScript type definitions for the TypeScript Playground Plugin API. This is the best place to find the various config options, properties, and methods that are available.
 
 ### Need inspiration?
 
@@ -163,14 +253,16 @@ The `src/plugin/vendor` directory contains all of the TypeScript type definition
 
 [https://github.com/orta/playground-slides](https://github.com/orta/playground-slides)
 
-He also offered these plugin ideas in [this](https://www.reddit.com/r/typescript/comments/eywcn8/learn_how_to_make_a_typescript_playground_plugin/fglyuon/) reddit thread.
+He also offered these plugin ideas in [this](https://github.com/microsoft/TypeScript-Website/issues/221) issue.
 
-- Explain the parts of a complex TS type
-- Show TS -> Flow interfaces
-- Run tutorials in the playground against live code
+- An LSP-ish Playground where you can make see the response to specific calls
+- An English explainer which explains a complex TS type
+- Convert TS dts -> Flow interfaces(flowgen)
+- Run tutorials in the playground against live code as a learning tool
 - AST Viewer
 - ts-query runner
 - codemod runner
-- Highlight TS vs JS code
-- Show all used types
-- Show dts files
+- Highlight TS vs JS (or type vs value) parts of some code code
+- Show all used types in a file
+- Show dts files in the current workspace
+- Edit an ambient dts file
