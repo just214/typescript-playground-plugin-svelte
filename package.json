@@ -3,6 +3,9 @@
   "description": "Easily create TypeScript Playground Plugins with Svelte.",
   "version": "0.0.1",
   "main": "dist/index.js",
+  "keywords": [
+    "playground-plugin"
+  ],
   "license": "MIT",
   "scripts": {
     "start": "npm run watch",
